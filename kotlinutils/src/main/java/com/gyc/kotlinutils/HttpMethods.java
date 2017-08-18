@@ -89,6 +89,54 @@ public class HttpMethods {
         Observable<ResponseEntity<List<JsonObject>>> execute(@Url String url, @QueryMap Map<String, Object> map);
     }
 
+    /***
+     * 通用JsonObject对象GET请求接口 path：请求字串   map：参数
+     */
+    public interface CommonJsonObjectGetRequest {
+        @GET
+        Observable<JsonObject> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
+    /***
+     * 通用JsonObject对象GET请求接口 path：请求字串   map：参数
+     */
+    public interface CommonJsonObjectPostRequest {
+        @POST
+        Observable<JsonObject> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
+    /***
+     * 通用JsonObject对象GET请求接口 path：请求字串   map：参数
+     */
+    public interface CommonListJsonObjectGetRequest {
+        @GET
+        Observable<List<JsonObject>> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
+    /***
+     * 通用JsonObject对象GET请求接口 path：请求字串   map：参数
+     */
+    public interface CommonListJsonObjectPostRequest {
+        @POST
+        Observable<List<JsonObject>> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
+    /***
+     * 通用对象GET请求接口 path：请求字串   map：参数
+     */
+    public interface CommonObjectGetRequest {
+        @GET
+        Observable<Object> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
+    /***
+     * 通用对象POST请求接口 path：请求字串   map：参数
+     */
+    public interface CommonObjectPostRequest {
+        @POST
+        Observable<Object> execute(@Url String url, @QueryMap Map<String, Object> map);
+    }
+
     //添加线程管理并订阅
     private void toSubscribe(Observable o, Subscriber s) {
         o.subscribeOn(Schedulers.io())
@@ -116,6 +164,40 @@ public class HttpMethods {
             observable = retrofit.create(CommonListGetRequest.class).execute(url, map);
         } else {
             observable = retrofit.create(CommonListPostRequest.class).execute(url, map);
+        }
+        toSubscribe(observable, subscriber);
+    }
+
+    public void objectRequest(Subscriber<Object> subscriber, String url, String method, Map<String, Object> map) {
+        Logger.e("请求url--->" + url + "\n请求方式--->" + method + "\n参数--->" + map.toString());
+        Observable<Object> observable;
+        if (method.equals("get")) {
+            observable = retrofit.create(CommonObjectGetRequest.class).execute(url, map);
+        } else {
+            observable = retrofit.create(CommonObjectPostRequest.class).execute(url, map);
+        }
+        toSubscribe(observable, subscriber);
+    }
+
+    public void jsonObjectRequest(Subscriber<JsonObject> subscriber, String url, String method, Map<String, Object> map) {
+        Logger.e("请求url--->" + url + "\n请求方式--->" + method + "\n参数--->" + map.toString());
+        Observable<JsonObject> observable;
+        if (method.equals("get")) {
+            observable = retrofit.create(CommonJsonObjectGetRequest.class).execute(url, map);
+        } else {
+            observable = retrofit.create(CommonJsonObjectPostRequest.class).execute(url, map);
+        }
+        toSubscribe(observable, subscriber);
+    }
+
+
+    public void listJsonObjectRequest(Subscriber<List<JsonObject>> subscriber, String url, String method, Map<String, Object> map) {
+        Logger.e("请求url--->" + url + "\n请求方式--->" + method + "\n参数--->" + map.toString());
+        Observable<List<JsonObject>> observable;
+        if (method.equals("get")) {
+            observable = retrofit.create(CommonListJsonObjectGetRequest.class).execute(url, map);
+        } else {
+            observable = retrofit.create(CommonListJsonObjectPostRequest.class).execute(url, map);
         }
         toSubscribe(observable, subscriber);
     }
